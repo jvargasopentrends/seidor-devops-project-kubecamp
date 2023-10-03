@@ -30,7 +30,7 @@ Antes de comenzar con los ejercicios, asegúrate de tener instalado y configurad
 2. **Integración Continua con Jenkins y SonarQube**:
 
    - Para cada microservicio, crea un `Jenkinsfile` que defina los pasos para correr tests (si los hay), verificar la calidad del código usando SonarQube y crear una imagen Docker para finalmente subirla a DockerHub.
-   - Configura un webhook en tu repositorio de GitHub para que Jenkins inicie este proceso automáticamente cada vez que se haga un push a la rama `main`.
+   - Configura un webhook en tu repositorio de GitHub para que Jenkins inicie este proceso automáticamente cada vez quecd se se haga un push a la rama `main`.
 
 3. **Despliegue con Helm**:
 

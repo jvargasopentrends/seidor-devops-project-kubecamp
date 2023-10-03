@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        // Definir variables de entorno
+        DOCKER_IMAGE = 'jvargas99/services_php-progress'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Construye la imagen de Docker
+                    docker.build("${DOCKER_IMAGE}:latest", "-f ./services/php-progress/Dockerfile .") 
+                }
+            }
+        }
+
+        stage('Test in Docker') {
+            steps {
+                script {
+                    // Ejecuta pruebas dentro de un contenedor Docker
+                    docker.image("${DOCKER_IMAGE}:latest").inside {
+                        sh './gradlew test'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Docker Image') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'dockerhub', variable: 'DOCKERHUB_TOKEN')]) {
+                        sh '''
+                            echo "Logging in to Docker Hub"
+                            echo "$DOCKERHUB_TOKEN" | docker login -u jvargas99 --password-stdin
+                        '''                        
+                        sh "docker push ${DOCKER_IMAGE}:latest"
+
+                    }
+                }
+            }
+        }
+    }
+}
