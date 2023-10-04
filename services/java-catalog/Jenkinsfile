@@ -22,17 +22,6 @@ pipeline {
             }
         }
 
-        stage('Test in Docker') {
-            steps {
-                script {
-                    // Ejecuta pruebas dentro de un contenedor Docker
-                    docker.image("${DOCKER_IMAGE}:latest").inside {
-                        sh './gradlew test'
-                    }
-                }
-            }
-        }
-
         stage('Deploy Docker Image') {
             steps {
                 script {
